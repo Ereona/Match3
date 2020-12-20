@@ -29,7 +29,11 @@ public class GameActionImplementationsFabric : MonoBehaviour
         }
         else if (action is MoveGemGameAction)
         {
-            impl = new MoveGemActionImplementation();
+            impl = new MoveGemGameActionImplementation();
+        }
+        else if (action is SpawnGemGameAction)
+        {
+            impl = new SpawnGemGameActionImplementation();
         }
         else
         {

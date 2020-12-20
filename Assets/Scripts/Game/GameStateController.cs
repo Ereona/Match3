@@ -11,13 +11,15 @@ public class GameStateController : MonoBehaviour
     private Cell SelectedCell;
     private MatchesCounter Counter;
     private GemsFallCounter FallCounter;
+    private GemsSpawnCounter SpawnCounter;
     private GameActionsContainer ActionsContainer;
 
-    public void Init(Field field)
+    public void Init(Field field, int[] colors)
     {
         FieldWithGems = field;
         Counter = new MatchesCounter(field);
         FallCounter = new GemsFallCounter(field);
+        SpawnCounter = new GemsSpawnCounter(field, colors);
         ActionsContainer = GetComponent<GameActionsContainer>();
     }
 
@@ -99,6 +101,7 @@ public class GameStateController : MonoBehaviour
                 while (!movingFinished)
                 {
                     List<GameAction> movingActions = FallCounter.DoMoving();
+                    movingActions.AddRange(SpawnCounter.CalcSpawnActions());
                     if (movingActions.Count > 0)
                     {
                         ActionsContainer.Clear();

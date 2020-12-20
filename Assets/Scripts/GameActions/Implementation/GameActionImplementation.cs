@@ -50,4 +50,16 @@ public abstract class GameActionImplementation
         g1.transform.position = g2pos;
         g2.transform.position = g1pos;
     }
+
+    protected IEnumerator Scale(GemObject g, Vector3 a, Vector3 b)
+    {
+        float t = 0;
+        while (t < Duration)
+        {
+            g.transform.localScale = Vector3.Lerp(a, b, t / Duration);
+            t += Time.deltaTime;
+            yield return null;
+        }
+        g.transform.localScale = b;
+    }
 }

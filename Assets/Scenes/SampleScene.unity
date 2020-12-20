@@ -374,6 +374,7 @@ MonoBehaviour:
   CellAssets:
   - {fileID: 11400000, guid: 061708e43eda5614a8b8e2c87156db5c, type: 2}
   - {fileID: 11400000, guid: 4df3ccc8cb67c6540bc91e7dacbe05a2, type: 2}
+  - {fileID: 11400000, guid: 116bb788cbe6e104c90b7727d514479a, type: 2}
   GemPrefab: {fileID: 1484400749377893279, guid: ac2a467a10a658841baecada7db423f7,
     type: 3}
   GemAssets:
@@ -689,6 +690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39188e41503e2224799d027abf3207f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ActionDuration: 0.25
 --- !u!114 &1892509843
 MonoBehaviour:
   m_ObjectHideFlags: 0

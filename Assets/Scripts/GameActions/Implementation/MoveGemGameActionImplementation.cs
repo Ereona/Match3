@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveGemActionImplementation : GameActionImplementation
+public class MoveGemGameActionImplementation : GameActionImplementation
 {
     protected override IEnumerator PerformImpl()
     {

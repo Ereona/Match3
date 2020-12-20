@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RandomGemGenerationSettings : GemGenerationSettings
+public class FixedSizeRandomGemGenerationSettings : GemGenerationSettings
 {
-    public RandomGemGenerationSettings(int[] colors, int count)
+    public FixedSizeRandomGemGenerationSettings(int[] colors, int count)
     {
         for (int i = 0; i < count; i++)
         {

@@ -17,19 +17,25 @@ public class GameInitializer : MonoBehaviour
         List<CellGenerationInfo> generationInfos = new List<CellGenerationInfo>();
         CellGenerationInfo holesInfo = new CellGenerationInfo();
         holesInfo.type = CellType.Hole;
+        holesInfo.fixedCount = true;
         holesInfo.count = HolesCount;
         generationInfos.Add(holesInfo);
+        CellGenerationInfo spawnerInfo = new CellGenerationInfo();
+        spawnerInfo.type = CellType.Spawner;
+        spawnerInfo.fixedRow = true;
+        spawnerInfo.rowNumber = 0;
+        generationInfos.Add(spawnerInfo);
         Field field = generator.Generate(RowsCount, ColsCount, generationInfos);
 
         List<Cell> allCells = field.GetAllCells();
         List<Cell> fillingCells = allCells.Where(c => GameRules.NeedFillCell(c.type)).ToList();
         GemsGenerator gemsGenerator = new GemsGenerator();
         int[] colors = new int[] { 0, 1, 2, 3 };
-        GemGenerationSettings gemsGenerationInfos = new RandomGemGenerationSettings(colors, fillingCells.Count);
+        GemGenerationSettings gemsGenerationInfos = new FixedSizeRandomGemGenerationSettings(colors, fillingCells.Count);
         List<Gem> gems = gemsGenerator.Generate(fillingCells, gemsGenerationInfos);
 
         Builder.BuildField(field);
 
-        StateController.Init(field);
+        StateController.Init(field, colors);
     }
 }

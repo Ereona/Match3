@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CellType
+public class SpawnGemGameAction : GameAction
 {
-    Simple,
-    Hole,
-    Spawner
+    public Cell Cell;
 }

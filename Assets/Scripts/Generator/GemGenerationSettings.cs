@@ -7,19 +7,19 @@ public abstract class GemGenerationSettings
 {
     private List<GenerationSettingsItem> infos = new List<GenerationSettingsItem>();
 
-    public List<int> GetAllColors()
+    public virtual List<int> GetAllColors()
     {
         return infos.Select(c => c.gemColorId).ToList();
     }
 
-    public int GetPreferredColor(List<int> possibleColors)
+    public virtual int GetPreferredColor(List<int> possibleColors)
     {
         List<GenerationSettingsItem> genInfosOrdered = infos.Where(c => possibleColors.Contains(c.gemColorId))
             .OrderByDescending(c => c.count).ToList();
         return genInfosOrdered[0].gemColorId;
     }
 
-    public void SubstractOne(int colorId)
+    public virtual void SubstractOne(int colorId)
     {
         GenerationSettingsItem colorInfo = infos.First(c => c.gemColorId == colorId);
         colorInfo.count--;
