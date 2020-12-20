@@ -40,23 +40,7 @@ public class GameStateController : MonoBehaviour
         {
             if (SelectedCell != null && Counter.AreNeighbors(SelectedCell, clicked))
             {
-                ActionsContainer.Clear();
-                TwoCellsGameAction movingAction;
-                if (Counter.HasMatchesAfterSwap(SelectedCell, clicked))
-                {
-                    movingAction = new GemsSwapGameAction();
-                }
-                else
-                {
-                    movingAction = new GemsBothWayMovingGameAction();
-                }
-                movingAction.Cell1 = SelectedCell;
-                movingAction.Cell2 = clicked;
-                ActionsContainer.Add(movingAction);
-
-                StartCoroutine(PerformGameActions());
-                SelectedCell = null;
-                SelectionChangedEvent.RaiseEvent(null);
+                StartCoroutine(AfterSecondCellClicked(clicked));
             }
             else
             {
@@ -64,6 +48,45 @@ public class GameStateController : MonoBehaviour
                 State = GameState.Selection;
                 SelectionChangedEvent.RaiseEvent(clicked);
             }
+        }
+    }
+
+    private IEnumerator AfterSecondCellClicked(Cell clicked)
+    {
+        ActionsContainer.Clear();
+        TwoCellsGameAction movingAction;
+        if (Counter.HasMatchesAfterSwap(SelectedCell, clicked))
+        {
+            movingAction = new GemsSwapGameAction();
+        }
+        else
+        {
+            movingAction = new GemsBothWayMovingGameAction();
+        }
+        movingAction.Cell1 = SelectedCell;
+        movingAction.Cell2 = clicked;
+        ActionsContainer.Add(movingAction);
+
+        SelectedCell = null;
+        SelectionChangedEvent.RaiseEvent(null);
+
+        yield return StartCoroutine(PerformGameActions());
+        yield return UpdateField();
+    }
+
+    private IEnumerator UpdateField()
+    {
+        MatchesList matches = Counter.FindAllMatches();
+        if (matches.GetAllCells().Count > 0)
+        {
+            ActionsContainer.Clear();
+            foreach (Cell c in matches.GetAllCells())
+            {
+                RemoveGemGameAction action = new RemoveGemGameAction();
+                action.RemovingCell = c;
+                ActionsContainer.Add(action);
+            }
+            yield return PerformGameActions();
         }
     }
 

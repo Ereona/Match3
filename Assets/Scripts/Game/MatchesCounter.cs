@@ -105,8 +105,53 @@ public class MatchesCounter
         return cell.GemInCell.colorId == color;
     }
 
-    public void FindMatches()
+    public MatchesList FindAllMatches()
     {
+        MatchesList result = new MatchesList();
+        List<Cell> cells = new List<Cell>();
+        for (int i = 0; i < FieldWithGems.Rows; i++)
+        {
+            for (int j = 0; j < FieldWithGems.Cols; j++)
+            {
+                CheckAddCellToList(cells, i, j, result);
+            }
+            result.TryAdd(cells);
+        }
 
+        for (int j = 0; j < FieldWithGems.Cols; j++)
+        {
+            for (int i = 0; i < FieldWithGems.Rows; i++)
+            {
+                CheckAddCellToList(cells, i, j, result);
+            }
+            result.TryAdd(cells);
+        }
+        return result;
+    }
+
+    private void CheckAddCellToList(List<Cell> cells, int i, int j, MatchesList result)
+    {
+        if (FieldWithGems[i, j].GemInCell == null)
+        {
+            result.TryAdd(cells);
+            return;
+        }
+        if (cells.Count == 0)
+        {
+            cells.Add(FieldWithGems[i, j]);
+        }
+        else
+        {
+            int color = cells[0].GemInCell.colorId;
+            if (IsSameColor(i, j, color))
+            {
+                cells.Add(FieldWithGems[i, j]);
+            }
+            else
+            {
+                result.TryAdd(cells);
+                cells.Add(FieldWithGems[i, j]);
+            }
+        }
     }
 }

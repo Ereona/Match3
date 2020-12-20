@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameActionImplementationsFabric : MonoBehaviour
 {
+    public float ActionDuration = 0.25f;
     private FieldObjectsContainer Objects;
 
     private void Start()
@@ -22,10 +23,15 @@ public class GameActionImplementationsFabric : MonoBehaviour
         {
             impl = new GemsBothWayMovingGameActionImplementation();
         }
+        else if (action is RemoveGemGameAction)
+        {
+            impl = new RemoveGemGameActionImplementation();
+        }
         else
         {
             throw new System.NotImplementedException("Unknown action type");
         }
+        impl.Duration = ActionDuration;
         impl.SourceAction = action;
         impl.Objects = Objects;
         return impl;

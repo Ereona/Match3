@@ -4,8 +4,18 @@ using UnityEngine;
 
 public abstract class GameActionImplementation
 {
-    public bool IsPerformed { get; protected set; }
-    public abstract IEnumerator Perform();
+    public bool IsPerformed { get; private set; }
+
+    public float Duration { get; set; }
+
+    public IEnumerator Perform()
+    {
+        IsPerformed = false;
+        yield return PerformImpl();
+        IsPerformed = true;
+    }
+
+    protected abstract IEnumerator PerformImpl();
 
     public FieldObjectsContainer Objects;
 
@@ -13,13 +23,12 @@ public abstract class GameActionImplementation
 
     protected IEnumerator Move(CellObject c1, CellObject c2, GemObject g)
     {
-        float interval = 0.25f;
         Vector3 c1pos = c1.transform.position;
         Vector3 c2pos = c2.transform.position;
         float t = 0;
-        while (t < interval)
+        while (t < Duration)
         {
-            g.transform.position = Vector3.Lerp(c1pos, c2pos, t / interval);
+            g.transform.position = Vector3.Lerp(c1pos, c2pos, t / Duration);
             t += Time.deltaTime;
             yield return null;
         }
@@ -28,14 +37,13 @@ public abstract class GameActionImplementation
 
     protected IEnumerator Swap(CellObject c1, CellObject c2, GemObject g1, GemObject g2)
     {
-        float interval = 0.25f;
         Vector3 c1pos = c1.transform.position;
         Vector3 c2pos = c2.transform.position;
         float t = 0;
-        while (t < interval)
+        while (t < Duration)
         {
-            g1.transform.position = Vector3.Lerp(c1pos, c2pos, t / interval);
-            g2.transform.position = Vector3.Lerp(c2pos, c1pos, t / interval);
+            g1.transform.position = Vector3.Lerp(c1pos, c2pos, t / Duration);
+            g2.transform.position = Vector3.Lerp(c2pos, c1pos, t / Duration);
             t += Time.deltaTime;
             yield return null;
         }

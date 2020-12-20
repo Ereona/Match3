@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class GemsBothWayMovingGameActionImplementation : GameActionImplementation
 {
-    public override IEnumerator Perform()
+    protected override IEnumerator PerformImpl()
     {
-        IsPerformed = false;
         TwoCellsGameAction source = SourceAction as TwoCellsGameAction;
         CellObject c1 = Objects.Cells.Find(source.Cell1);
         CellObject c2 = Objects.Cells.Find(source.Cell2);
@@ -16,6 +15,5 @@ public class GemsBothWayMovingGameActionImplementation : GameActionImplementatio
         GemObject g2 = Objects.Gems.Find(gem2);
         yield return Swap(c1, c2, g1, g2);
         yield return Swap(c2, c1, g1, g2);
-        IsPerformed = true;
     }
 }
