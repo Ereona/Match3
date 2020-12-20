@@ -27,7 +27,7 @@ public class GemsGenerator
             genInfo.SubstractOne(preferredColor);
             UpdatePossibleColors(cell, cellsWithColors);
         }
-        return ConvertToGems(cellsWithColors);
+        return FillWithGems(cellsWithColors);
     }
 
     private void AddGuaranteedMove(List<CellFillingInfo> cellsWithColors, GemGenerationSettings genInfo)
@@ -87,7 +87,7 @@ public class GemsGenerator
         }
     }
 
-    private List<Gem> ConvertToGems(List<CellFillingInfo> cells)
+    private List<Gem> FillWithGems(List<CellFillingInfo> cells)
     {
         List<Gem> result = new List<Gem>();
         foreach (CellFillingInfo cell in cells)
@@ -95,9 +95,8 @@ public class GemsGenerator
             if (cell.IsFilled)
             {
                 Gem g = new Gem();
-                g.row = cell.Cell.row;
-                g.col = cell.Cell.col;
                 g.colorId = cell.FilledColor;
+                cell.Cell.GemInCell = g;
                 result.Add(g);
             }
         }

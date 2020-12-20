@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gem : FieldElement
+public class GemsBothWayMovingGameAction : TwoCellsGameAction
 {
-    public int colorId;
+
 }

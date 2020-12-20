@@ -35,7 +35,14 @@ public class Field
     {
         get
         {
-            return cells[i, j];
+            if (i >= 0 && i < Rows && j >= 0 && j < Cols)
+            {
+                return cells[i, j];
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 
@@ -55,5 +62,20 @@ public class Field
     public List<Cell> GetAllCells()
     {
         return cells.Cast<Cell>().ToList();
+    }
+
+    private void Clear()
+    {
+        foreach (Cell c in GetAllCells())
+        {
+            c.GemInCell = null;
+        }
+    }
+
+    public void Swap(Cell c1, Cell c2)
+    {
+        Gem temp = c1.GemInCell;
+        c1.GemInCell = c2.GemInCell;
+        c2.GemInCell = temp;
     }
 }

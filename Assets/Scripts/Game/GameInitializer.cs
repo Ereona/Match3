@@ -9,6 +9,7 @@ public class GameInitializer : MonoBehaviour
     public int ColsCount;
     public int HolesCount;
     public FieldBuilder Builder;
+    public GameStateController StateController;
 
     private void Start()
     {
@@ -19,7 +20,6 @@ public class GameInitializer : MonoBehaviour
         holesInfo.count = HolesCount;
         generationInfos.Add(holesInfo);
         Field field = generator.Generate(RowsCount, ColsCount, generationInfos);
-        Builder.BuildField(field);
 
         List<Cell> allCells = field.GetAllCells();
         List<Cell> fillingCells = allCells.Where(c => GameRules.NeedFillCell(c.type)).ToList();
@@ -27,6 +27,9 @@ public class GameInitializer : MonoBehaviour
         int[] colors = new int[] { 0, 1, 2, 3 };
         GemGenerationSettings gemsGenerationInfos = new RandomGemGenerationSettings(colors, fillingCells.Count);
         List<Gem> gems = gemsGenerator.Generate(fillingCells, gemsGenerationInfos);
-        Builder.BuildGems(gems);
+
+        Builder.BuildField(field);
+
+        StateController.Init(field);
     }
 }
