@@ -105,5 +105,8 @@ public class MatchesCounter
         return cell.GemInCell.colorId == color;
     }
 
+    public void FindMatches()
+    {
 
+    }
 }
