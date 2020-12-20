@@ -4,6 +4,4 @@ using UnityEngine;
 
 public class GameAction
 {
-    public virtual void OnActionPerformed(Field fieldWithGems)
-    { }
 }

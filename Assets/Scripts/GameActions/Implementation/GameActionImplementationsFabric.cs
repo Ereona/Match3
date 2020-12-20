@@ -27,6 +27,10 @@ public class GameActionImplementationsFabric : MonoBehaviour
         {
             impl = new RemoveGemGameActionImplementation();
         }
+        else if (action is MoveGemGameAction)
+        {
+            impl = new MoveGemActionImplementation();
+        }
         else
         {
             throw new System.NotImplementedException("Unknown action type");

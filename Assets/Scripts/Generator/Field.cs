@@ -78,4 +78,12 @@ public class Field
         c1.GemInCell = c2.GemInCell;
         c2.GemInCell = temp;
     }
+
+    public void ClearCells(List<Cell> cells)
+    {
+        foreach (Cell c in cells)
+        {
+            c.GemInCell = null;
+        }
+    }
 }

@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class TwoCellsGameAction : GameAction
 {
-    public Cell Cell1;
-    public Cell Cell2;
+    public Gem Gem1;
+    public Gem Gem2;
 }

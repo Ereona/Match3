@@ -10,12 +10,14 @@ public class GameStateController : MonoBehaviour
     private Field FieldWithGems;
     private Cell SelectedCell;
     private MatchesCounter Counter;
+    private GemsFallCounter FallCounter;
     private GameActionsContainer ActionsContainer;
 
     public void Init(Field field)
     {
         FieldWithGems = field;
         Counter = new MatchesCounter(field);
+        FallCounter = new GemsFallCounter(field);
         ActionsContainer = GetComponent<GameActionsContainer>();
     }
 
@@ -55,6 +57,7 @@ public class GameStateController : MonoBehaviour
     {
         ActionsContainer.Clear();
         TwoCellsGameAction movingAction;
+        FieldWithGems.Swap(SelectedCell, clicked);
         if (Counter.HasMatchesAfterSwap(SelectedCell, clicked))
         {
             movingAction = new GemsSwapGameAction();
@@ -62,9 +65,10 @@ public class GameStateController : MonoBehaviour
         else
         {
             movingAction = new GemsBothWayMovingGameAction();
+            FieldWithGems.Swap(SelectedCell, clicked);
         }
-        movingAction.Cell1 = SelectedCell;
-        movingAction.Cell2 = clicked;
+        movingAction.Gem1 = SelectedCell.GemInCell;
+        movingAction.Gem2 = clicked.GemInCell;
         ActionsContainer.Add(movingAction);
 
         SelectedCell = null;
@@ -76,17 +80,44 @@ public class GameStateController : MonoBehaviour
 
     private IEnumerator UpdateField()
     {
-        MatchesList matches = Counter.FindAllMatches();
-        if (matches.GetAllCells().Count > 0)
+        bool finished = false;
+        while (!finished)
         {
-            ActionsContainer.Clear();
-            foreach (Cell c in matches.GetAllCells())
+            MatchesList matches = Counter.FindAllMatches();
+            if (matches.GetAllCells().Count > 0)
             {
-                RemoveGemGameAction action = new RemoveGemGameAction();
-                action.RemovingCell = c;
-                ActionsContainer.Add(action);
+                ActionsContainer.Clear();
+                foreach (Cell c in matches.GetAllCells())
+                {
+                    RemoveGemGameAction action = new RemoveGemGameAction();
+                    action.RemovingGem = c.GemInCell;
+                    ActionsContainer.Add(action);
+                }
+                FieldWithGems.ClearCells(matches.GetAllCells());
+                yield return PerformGameActions();
+                bool movingFinished = false;
+                while (!movingFinished)
+                {
+                    List<GameAction> movingActions = FallCounter.DoMoving();
+                    if (movingActions.Count > 0)
+                    {
+                        ActionsContainer.Clear();
+                        foreach (GameAction a in movingActions)
+                        {
+                            ActionsContainer.Add(a);
+                        }
+                        yield return PerformGameActions();
+                    }
+                    else
+                    {
+                        movingFinished = true;
+                    }
+                }
             }
-            yield return PerformGameActions();
+            else
+            {
+                finished = true;
+            }
         }
     }
 
@@ -94,7 +125,6 @@ public class GameStateController : MonoBehaviour
     {
         State = GameState.Animation;
         yield return ActionsContainer.PerformAll();
-        ActionsContainer.OnActionsPerformed(FieldWithGems);
         State = GameState.Selection;
     }
 }

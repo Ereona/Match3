@@ -7,7 +7,7 @@ public class RemoveGemGameActionImplementation : GameActionImplementation
     protected override IEnumerator PerformImpl()
     {
         RemoveGemGameAction source = SourceAction as RemoveGemGameAction;
-        GemObject g = Objects.Gems.Find(source.RemovingCell.GemInCell);
+        GemObject g = Objects.Gems.Find(source.RemovingGem);
         float t = 0;
         while (t < Duration)
         {

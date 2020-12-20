@@ -45,12 +45,4 @@ public class GameActionsContainer : MonoBehaviour
         }
         return false;
     }
-
-    public void OnActionsPerformed(Field fieldWithGems)
-    {
-        foreach (GameActionImplementation a in actions)
-        {
-            a.SourceAction.OnActionPerformed(fieldWithGems);
-        }
-    }
 }

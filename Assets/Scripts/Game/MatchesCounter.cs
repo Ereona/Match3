@@ -34,9 +34,7 @@ public class MatchesCounter
         {
             return false;
         }
-        FieldWithGems.Swap(cell1, cell2);
         bool result = CheckMatchWithCell(cell1) || CheckMatchWithCell(cell2);
-        FieldWithGems.Swap(cell1, cell2);
         return result;
     }
 
