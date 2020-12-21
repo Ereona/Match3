@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class FieldBuilder : MonoBehaviour
 {
-    public float oneCellSize = 100;
+    public GameSettingsSO GameSettings;
     public RectTransform CellsParent;
     public RectTransform GemsParent;
 
@@ -36,7 +36,7 @@ public class FieldBuilder : MonoBehaviour
             cellObject.transform.SetAsLastSibling();
             cellObject.transform.localScale = Vector3.one;
             cellObject.transform.localPosition = CalcPosition(c.row, c.col);
-            ((RectTransform)cellObject.transform).sizeDelta = Vector2.one * oneCellSize;
+            ((RectTransform)cellObject.transform).sizeDelta = Vector2.one * GameSettings.CellSize;
             if (c.GemInCell != null)
             {
                 BuildGemInCell(c, cellObject);
@@ -64,14 +64,14 @@ public class FieldBuilder : MonoBehaviour
         gemObject.transform.SetAsLastSibling();
         gemObject.transform.localScale = Vector3.one;
         gemObject.transform.localPosition = cellObject.transform.localPosition;
-        ((RectTransform)cellObject.transform).sizeDelta = Vector2.one * oneCellSize;
+        ((RectTransform)gemObject.transform).sizeDelta = Vector2.one * GameSettings.CellSize;
         return gemObject;
     }
 
     private Vector3 CalcPosition(int row, int col)
     {
-        float x = (col - (float)(colsCount - 1) / 2) * oneCellSize;
-        float y = (row - (float)(rowsCount - 1) / 2) * oneCellSize;
+        float x = (col - (float)(colsCount - 1) / 2) * GameSettings.CellSize;
+        float y = (row - (float)(rowsCount - 1) / 2) * GameSettings.CellSize;
         return new Vector3(x, y, 0);
     }
 }

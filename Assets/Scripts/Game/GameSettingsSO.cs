@@ -9,4 +9,5 @@ public class GameSettingsSO : ScriptableObject
     public int ColsCount;
     public int HolesCount;
     public List<int> Colors = new List<int>();
+    public int CellSize;
 }

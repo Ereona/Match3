@@ -20,4 +20,9 @@ public class MatchesList
     {
         return matches.SelectMany(c => c).Distinct().ToList();
     }
+
+    public List<List<Cell>> GetAllMatches()
+    {
+        return matches;
+    }
 }

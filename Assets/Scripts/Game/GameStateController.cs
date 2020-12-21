@@ -7,6 +7,8 @@ public class GameStateController : MonoBehaviour
 {
     public CellEventChannelSO CellClickEvent;
     public CellEventChannelSO SelectionChangedEvent;
+    public BoolEventChannelSO MixEvent;
+    public MatchesListEventChannelSO MatchesEvent;
 
     private Field FieldWithGems;
     private Cell SelectedCell;
@@ -121,6 +123,7 @@ public class GameStateController : MonoBehaviour
         }
         FieldWithGems.ClearCells(matches.GetAllCells());
         yield return PerformGameActions();
+        MatchesEvent.RaiseEvent(matches);
         bool movingFinished = false;
         while (!movingFinished)
         {
@@ -141,6 +144,7 @@ public class GameStateController : MonoBehaviour
 
     private IEnumerator MixGems()
     {
+        MixEvent.RaiseEvent(true);
         List<Cell> cells = FieldWithGems.GetFilledCells();
         ActionsContainer.Clear();
         Dictionary<int, int> counts = new Dictionary<int, int>();
@@ -170,6 +174,7 @@ public class GameStateController : MonoBehaviour
             ActionsContainer.Add(showAction);
         }
         yield return PerformGameActions();
+        MixEvent.RaiseEvent(false);
     }
 
     private IEnumerator PerformGameActions()

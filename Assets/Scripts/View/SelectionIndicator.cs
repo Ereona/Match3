@@ -6,12 +6,14 @@ using UnityEngine.UI;
 
 public class SelectionIndicator : MonoBehaviour
 {
+    public GameSettingsSO GameSettings;
     public CellEventChannelSO SelectionChangedEvent;
     public Image SelectionImage;
     private FieldObjectsContainer Objects;
 
     void Start()
     {
+        SelectionImage.rectTransform.sizeDelta = Vector2.one * GameSettings.CellSize;
         SelectionImage.gameObject.SetActive(false);
         Objects = FindObjectOfType<FieldObjectsContainer>();
     }
