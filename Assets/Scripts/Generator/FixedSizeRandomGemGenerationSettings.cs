@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class FixedSizeRandomGemGenerationSettings : GemGenerationSettings
 {
-    public FixedSizeRandomGemGenerationSettings(int[] colors, int count)
+    public FixedSizeRandomGemGenerationSettings(List<int> colors, int count)
     {
         for (int i = 0; i < count; i++)
         {
-            int colorIndex = Random.Range(0, colors.Length);
+            int colorIndex = Random.Range(0, colors.Count);
             Add(colors[colorIndex], 1);
         }
     }

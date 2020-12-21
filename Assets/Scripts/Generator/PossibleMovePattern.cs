@@ -42,6 +42,11 @@ public class PossibleMovePattern
             }
             pattern.Add(new Vector2Int(0, 2));
         }
+        else if (PatternType == 3)
+        {
+            pattern.Add(new Vector2Int(0, 1));
+            pattern.Add(new Vector2Int(0, 3));
+        }
         else
         {
             throw new System.NotImplementedException("Unknown pattern type");
@@ -54,5 +59,31 @@ public class PossibleMovePattern
             }
         }
         return pattern;
+    }
+
+    public Vector2Int GetTargetCell()
+    {
+        Vector2Int targetCell;
+        if (PatternType == 1)
+        {
+            targetCell = new Vector2Int(0, 2);
+        }
+        else if (PatternType == 2)
+        {
+            targetCell = new Vector2Int(0, 1);
+        }
+        else if (PatternType == 3)
+        {
+            targetCell = new Vector2Int(0, 2);
+        }
+        else
+        {
+            throw new System.NotImplementedException("Unknown pattern type");
+        }
+        for (int i = 0; i < Rotation; i++)
+        {
+            targetCell = new Vector2Int(-targetCell.y, targetCell.x);
+        }
+        return targetCell;
     }
 }

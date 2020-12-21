@@ -105,8 +105,14 @@ public class GemsGenerator
 
     private bool TryFillPattern(CellFillingInfo startCell, List<CellFillingInfo> allCells, PossibleMovePattern pattern, out List<CellFillingInfo> filling)
     {
-        List<Vector2Int> positions = pattern.GetPattern();
         filling = new List<CellFillingInfo>();
+        Vector2Int targetCellVector = pattern.GetTargetCell();
+        CellFillingInfo targetCell = allCells.FirstOrDefault(c => c.Cell.row == startCell.Cell.row + targetCellVector.x && c.Cell.col == startCell.Cell.col + targetCellVector.y);
+        if (targetCell == null)
+        {
+            return false;
+        }
+        List<Vector2Int> positions = pattern.GetPattern();
         filling.Add(startCell);
         foreach (Vector2Int pos in positions)
         {

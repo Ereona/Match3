@@ -16,4 +16,12 @@ public class ConstGemGenerationSettings : GemGenerationSettings
             Add(colors[i], counts[i]);
         }
     }
+
+    public ConstGemGenerationSettings(Dictionary<int, int> counts)
+    {
+        foreach (KeyValuePair<int, int> pair in counts)
+        {
+            Add(pair.Key, pair.Value);
+        }
+    }
 }

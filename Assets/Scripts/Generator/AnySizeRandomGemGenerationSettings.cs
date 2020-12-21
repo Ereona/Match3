@@ -5,16 +5,16 @@ using UnityEngine;
 
 public class AnySizeRandomGemGenerationSettings : GemGenerationSettings
 {
-    private int[] colors;
+    private List<int> colors;
 
-    public AnySizeRandomGemGenerationSettings(int[] colors)
+    public AnySizeRandomGemGenerationSettings(List<int> colors)
     {
         this.colors = colors;
     }
 
     public override List<int> GetAllColors()
     {
-        return colors.ToList();
+        return colors;
     }
 
     public override int GetPreferredColor(List<int> possibleColors)

@@ -35,6 +35,14 @@ public class GameActionImplementationsFabric : MonoBehaviour
         {
             impl = new SpawnGemGameActionImplementation();
         }
+        else if (action is HideGemGameAction)
+        {
+            impl = new HideGemGameActionImplementation();
+        }
+        else if (action is ShowGemGameAction)
+        {
+            impl = new ShowGemGameActionImplementation();
+        }
         else
         {
             throw new System.NotImplementedException("Unknown action type");

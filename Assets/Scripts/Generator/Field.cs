@@ -64,7 +64,12 @@ public class Field
         return cells.Cast<Cell>().ToList();
     }
 
-    private void Clear()
+    public List<Cell> GetFilledCells()
+    {
+        return GetAllCells().Where(c => c.GemInCell != null).ToList();
+    }
+
+    public void Clear()
     {
         foreach (Cell c in GetAllCells())
         {

@@ -6,11 +6,13 @@ using UnityEngine;
 public class GemsSpawnCounter : MonoBehaviour
 {
     private Field FieldWithGems;
-    GemGenerationSettings genSettings;
+    private GemGenerationSettings genSettings;
+    private List<int> colors;
 
-    public GemsSpawnCounter(Field field, int[] colors)
+    public GemsSpawnCounter(Field field, List<int> colors)
     {
         FieldWithGems = field;
+        this.colors = colors;
         genSettings = new AnySizeRandomGemGenerationSettings(colors);
     }
 
@@ -27,7 +29,7 @@ public class GemsSpawnCounter : MonoBehaviour
                     SpawnGemGameAction spawn = new SpawnGemGameAction();
                     spawn.Cell = c;
                     Gem gem = new Gem();
-                    gem.colorId = genSettings.GetPreferredColor(new int[] { 0, 1, 2, 3 }.ToList());
+                    gem.colorId = genSettings.GetPreferredColor(colors);
                     c.GemInCell = gem;
                     result.Add(spawn);
                 }

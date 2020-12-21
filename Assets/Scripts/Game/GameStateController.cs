@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameStateController : MonoBehaviour
@@ -12,14 +13,18 @@ public class GameStateController : MonoBehaviour
     private MatchesCounter Counter;
     private GemsFallCounter FallCounter;
     private GemsSpawnCounter SpawnCounter;
+    private PossibleMovesDetector MovesDetector;
     private GameActionsContainer ActionsContainer;
+    private GemsGenerator Generator;
 
-    public void Init(Field field, int[] colors)
+    public void Init(Field field, GemsGenerator generator, List<int> colors)
     {
         FieldWithGems = field;
+        Generator = generator;
         Counter = new MatchesCounter(field);
         FallCounter = new GemsFallCounter(field);
         SpawnCounter = new GemsSpawnCounter(field, colors);
+        MovesDetector = new PossibleMovesDetector(field);
         ActionsContainer = GetComponent<GameActionsContainer>();
     }
 
@@ -40,6 +45,10 @@ public class GameStateController : MonoBehaviour
 
     private void OnCellClick(Cell clicked)
     {
+        if (State != GameState.Selection)
+        {
+            return;
+        }
         if (GameRules.IsCellSelectable(clicked.type))
         {
             if (SelectedCell != null && Counter.AreNeighbors(SelectedCell, clicked))
@@ -88,40 +97,79 @@ public class GameStateController : MonoBehaviour
             MatchesList matches = Counter.FindAllMatches();
             if (matches.GetAllCells().Count > 0)
             {
-                ActionsContainer.Clear();
-                foreach (Cell c in matches.GetAllCells())
-                {
-                    RemoveGemGameAction action = new RemoveGemGameAction();
-                    action.RemovingGem = c.GemInCell;
-                    ActionsContainer.Add(action);
-                }
-                FieldWithGems.ClearCells(matches.GetAllCells());
-                yield return PerformGameActions();
-                bool movingFinished = false;
-                while (!movingFinished)
-                {
-                    List<GameAction> movingActions = FallCounter.DoMoving();
-                    movingActions.AddRange(SpawnCounter.CalcSpawnActions());
-                    if (movingActions.Count > 0)
-                    {
-                        ActionsContainer.Clear();
-                        foreach (GameAction a in movingActions)
-                        {
-                            ActionsContainer.Add(a);
-                        }
-                        yield return PerformGameActions();
-                    }
-                    else
-                    {
-                        movingFinished = true;
-                    }
-                }
+                yield return ApplyMatchesAndMove(matches);
             }
             else
             {
                 finished = true;
             }
         }
+        if (!MovesDetector.MoveExists())
+        {
+            yield return MixGems();
+        }
+    }
+
+    private IEnumerator ApplyMatchesAndMove(MatchesList matches)
+    {
+        ActionsContainer.Clear();
+        foreach (Cell c in matches.GetAllCells())
+        {
+            RemoveGemGameAction action = new RemoveGemGameAction();
+            action.RemovingGem = c.GemInCell;
+            ActionsContainer.Add(action);
+        }
+        FieldWithGems.ClearCells(matches.GetAllCells());
+        yield return PerformGameActions();
+        bool movingFinished = false;
+        while (!movingFinished)
+        {
+            List<GameAction> movingActions = FallCounter.DoMoving();
+            movingActions.AddRange(SpawnCounter.CalcSpawnActions());
+            if (movingActions.Count > 0)
+            {
+                ActionsContainer.Clear();
+                ActionsContainer.AddRange(movingActions);
+                yield return PerformGameActions();
+            }
+            else
+            {
+                movingFinished = true;
+            }
+        }
+    }
+
+    private IEnumerator MixGems()
+    {
+        List<Cell> cells = FieldWithGems.GetFilledCells();
+        ActionsContainer.Clear();
+        Dictionary<int, int> counts = new Dictionary<int, int>();
+        foreach (Cell c in cells)
+        {
+            HideGemGameAction hideAction = new HideGemGameAction();
+            hideAction.Gem = c.GemInCell;
+            ActionsContainer.Add(hideAction);
+            if (counts.ContainsKey(c.GemInCell.colorId))
+            {
+                counts[c.GemInCell.colorId]++;
+            }
+            else
+            {
+                counts[c.GemInCell.colorId] = 1;
+            }
+        }
+        FieldWithGems.Clear();
+        yield return PerformGameActions();
+        ConstGemGenerationSettings genSettings = new ConstGemGenerationSettings(counts);
+        Generator.Generate(cells, genSettings);
+        ActionsContainer.Clear();
+        foreach (Cell c in cells)
+        {
+            ShowGemGameAction showAction = new ShowGemGameAction();
+            showAction.Cell = c;
+            ActionsContainer.Add(showAction);
+        }
+        yield return PerformGameActions();
     }
 
     private IEnumerator PerformGameActions()

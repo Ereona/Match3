@@ -7,7 +7,7 @@ public class PossibleMovePatternsContainer
     public List<PossibleMovePattern> GetAllPatterns()
     {
         List<PossibleMovePattern> result = new List<PossibleMovePattern>();
-        for (int type = 1; type <= 2; type++)
+        for (int type = 1; type <= 3; type++)
         {
             for (int rot = 0; rot < 4; rot++)
             {

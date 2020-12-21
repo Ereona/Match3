@@ -5,9 +5,7 @@ using UnityEngine;
 
 public class GameInitializer : MonoBehaviour
 {
-    public int RowsCount;
-    public int ColsCount;
-    public int HolesCount;
+    public GameSettingsSO Settings;
     public FieldBuilder Builder;
     public GameStateController StateController;
 
@@ -18,24 +16,23 @@ public class GameInitializer : MonoBehaviour
         CellGenerationInfo holesInfo = new CellGenerationInfo();
         holesInfo.type = CellType.Hole;
         holesInfo.fixedCount = true;
-        holesInfo.count = HolesCount;
+        holesInfo.count = Settings.HolesCount;
         generationInfos.Add(holesInfo);
         CellGenerationInfo spawnerInfo = new CellGenerationInfo();
         spawnerInfo.type = CellType.Spawner;
         spawnerInfo.fixedRow = true;
         spawnerInfo.rowNumber = 0;
         generationInfos.Add(spawnerInfo);
-        Field field = generator.Generate(RowsCount, ColsCount, generationInfos);
+        Field field = generator.Generate(Settings.RowsCount, Settings.ColsCount, generationInfos);
 
         List<Cell> allCells = field.GetAllCells();
         List<Cell> fillingCells = allCells.Where(c => GameRules.NeedFillCell(c.type)).ToList();
         GemsGenerator gemsGenerator = new GemsGenerator();
-        int[] colors = new int[] { 0, 1, 2, 3 };
-        GemGenerationSettings gemsGenerationInfos = new FixedSizeRandomGemGenerationSettings(colors, fillingCells.Count);
+        GemGenerationSettings gemsGenerationInfos = new FixedSizeRandomGemGenerationSettings(Settings.Colors, fillingCells.Count);
         List<Gem> gems = gemsGenerator.Generate(fillingCells, gemsGenerationInfos);
 
         Builder.BuildField(field);
 
-        StateController.Init(field, colors);
+        StateController.Init(field, gemsGenerator, Settings.Colors);
     }
 }

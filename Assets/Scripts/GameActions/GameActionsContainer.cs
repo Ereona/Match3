@@ -17,6 +17,14 @@ public class GameActionsContainer : MonoBehaviour
         actions.Add(Fabric.CreateImplementation(action));
     }
 
+    public void AddRange(List<GameAction> actions)
+    {
+        foreach (GameAction a in actions)
+        {
+            Add(a);
+        }
+    }
+
     public void Clear()
     {
         actions.Clear();

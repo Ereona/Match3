@@ -286,9 +286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eabdebae1200fb54fb2556bd93a14a8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RowsCount: 6
-  ColsCount: 6
-  HolesCount: 3
+  Settings: {fileID: 11400000, guid: a0fa66be4779ad942a791104fe88f65c, type: 2}
   Builder: {fileID: 498110521}
   StateController: {fileID: 1892509840}
 --- !u!4 &1303883613
