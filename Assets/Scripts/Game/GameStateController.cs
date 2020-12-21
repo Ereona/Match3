@@ -116,7 +116,7 @@ public class GameStateController : MonoBehaviour
         foreach (Cell c in matches.GetAllCells())
         {
             RemoveGemGameAction action = new RemoveGemGameAction();
-            action.RemovingGem = c.GemInCell;
+            action.Gem = c.GemInCell;
             ActionsContainer.Add(action);
         }
         FieldWithGems.ClearCells(matches.GetAllCells());

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnGemGameAction : CellGameAction
+public abstract class CellGameAction : GameAction
 {
+    public Cell Cell;
 }

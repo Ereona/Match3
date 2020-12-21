@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RemoveGemGameAction : GameAction
+public class RemoveGemGameAction : GemGameAction
 {
-    public Gem RemovingGem;
 }

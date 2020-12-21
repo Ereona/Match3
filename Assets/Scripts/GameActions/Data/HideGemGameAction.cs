@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HideGemGameAction : GameAction
+public class HideGemGameAction : GemGameAction
 {
-    public Gem Gem;
 }
